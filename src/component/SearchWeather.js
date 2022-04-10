@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
+import {NotificationsOnline} from "../utilities/notificationsOnline";
 
 
 export function SearchWeather() {
 
-    const [search, setSearch] = useState("Mechelen");
+    const [search, setSearch] = useState("");
     const [data, setData] = useState([]);
     const [input, setInput] = useState("");
 
@@ -63,7 +64,7 @@ export function SearchWeather() {
                 <div className="row justify-content-center">
                     <div className="col-md-4">
                         <div className="card bg-dark text-white border-0">
-                            <img src={`https://source.unsplash.com/600x900/?${data?.main && data.weather[0].main}`}
+                            <img src="background-image.png"
                                  className="card-img"
                                  alt="..."/>
                             <div className="card-img-overlay">
@@ -91,6 +92,7 @@ export function SearchWeather() {
                                     <p className="lead fw-bolder mb-0">{data?.main && data.weather[0].main} - {data?.main && data.weather[0].description}</p>
                                     <p className="lead">{tempInCelsiusMin} &deg;C | {tempInCelsiusMax} &deg;C</p>
                                 </div>
+                                <NotificationsOnline data={data} />
                             </div>
                         </div>
                     </div>
