@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 
 export function SearchWeather() {
 
-    const [search, setSearch] = useState("");
+    const [search, setSearch] = useState("Mechelen");
     const [data, setData] = useState([]);
     const [input, setInput] = useState("");
 

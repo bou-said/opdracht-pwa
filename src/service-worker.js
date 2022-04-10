@@ -70,3 +70,56 @@ self.addEventListener('message', (event) => {
 });
 
 // Any other custom service worker logic can go here.
+var CACHE_NAME = 'weather-cache';
+var urls2Cache=[
+    "/",
+    "index.html",
+    "/favicon.ico",
+    "/manifest.json",
+    "/service-worker.js",
+    "/static/js/main.fc4c6391.js",
+    "/static/css/main.12d40f16.css",
+    "https://source.unsplash.com/600x900/?Clouds",
+    "https://api.openweathermap.org/data/2.5/weather?q=Mechelen&appid=e03a93b2e9494533123356c466c48f82"
+]
+
+//Bij het opstarten gaan files toegevoegd worden aan de aangemaakte weather-cache
+self.addEventListener('install', (e) =>{
+    e.waitUntil(
+        caches.open(CACHE_NAME).then(cache =>{
+            return cache.addAll(urls2Cache);
+        })
+    )
+})
+
+//Verwijderd oude cache en zorgt ervoor dat altijd laatste versie wordt bijgehouden
+self.addEventListener('activate', function(e){
+    e.waitUntil(
+        caches.keys().then(function(cacheNames){
+            return Promise.all(
+                cacheNames.filter(function(cacheName){
+
+                }).map(function (cacheName){
+                    return caches.delete(cacheName);
+                })
+            );
+        })
+    );
+});
+
+//
+self.addEventListener('fetch', (e) =>{
+    e.respondWith(
+        caches.match(e.request).then(function(response){
+            if(response){
+                console.log("Found in Cache");
+                console.log(e.request);
+                console.log(response);
+                return response;
+            }
+            console.log("Not found in Cache");
+            console.log(e.request);
+            return fetch(e.request);
+        })
+    )
+})
