@@ -2,11 +2,25 @@ import React, {useEffect, useState} from 'react';
 import {NotificationsOnline} from "../utilities/notificationsOnline";
 
 
+
 export function SearchWeather() {
 
     const [search, setSearch] = useState("");
     const [data, setData] = useState([]);
     const [input, setInput] = useState("");
+    //temp
+    const tempInCelsius = (data?.main) && (data.main.temp - 272.15).toFixed(1);
+    const tempInCelsiusMin = (data?.main) && (data.main.temp_min - 272.15).toFixed(1);
+    const tempInCelsiusMax = (data?.main) && (data.main.temp_max - 272.15).toFixed(1);
+
+    //date
+    const d = new Date();
+    const date = d.getDate();
+    const year = d.getFullYear();
+    const month = d.toLocaleString("default", {month: 'long'})
+    const day = d.toLocaleString("default", {weekday: 'long'})
+
+    console.log({data, input});
 
     useEffect(() => {
         const fetchWeather = async () => {
@@ -21,14 +35,14 @@ export function SearchWeather() {
         fetchWeather()
     }, [search])
 
-    console.log(data);
+
 
     const saveLocalItems = () => {
         localStorage.setItem("search", JSON.stringify(search));
     };
 
     const getLocalItems = () => {
-        let searchLocal = JSON.parse(localStorage.getItem("search"))
+        const searchLocal = JSON.parse(localStorage.getItem("search"))
         setSearch(searchLocal);
     }
 
@@ -40,23 +54,11 @@ export function SearchWeather() {
         saveLocalItems()
     }, [search]);
 
-    //temp
-    let tempInCelsius = (data?.main) && (data.main.temp - 272.15).toFixed(1);
-    let tempInCelsiusMin = (data?.main) && (data.main.temp_min - 272.15).toFixed(1);
-    let tempInCelsiusMax = (data?.main) && (data.main.temp_max - 272.15).toFixed(1);
-
-    //date
-    let d = new Date();
-    let date = d.getDate();
-    let year = d.getFullYear();
-    let month = d.toLocaleString("default", {month: 'long'})
-    let day = d.toLocaleString("default", {weekday: 'long'})
-
-
     const handleSubmit = (e) => {
         e.preventDefault();
         setSearch(input);
     };
+
 
     return (
         <div>
@@ -93,6 +95,7 @@ export function SearchWeather() {
                                     <p className="lead">{tempInCelsiusMin} &deg;C | {tempInCelsiusMax} &deg;C</p>
                                 </div>
                                 <NotificationsOnline data={data} />
+
                             </div>
                         </div>
                     </div>

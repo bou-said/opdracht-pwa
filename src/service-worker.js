@@ -74,6 +74,7 @@ registerRoute(
     })
 );
 
+
 /*registerRoute(
     // Add in any other file extensions or routing criteria as needed.
     ({url}) => url.origin === 'https://images.unsplash.com/',
