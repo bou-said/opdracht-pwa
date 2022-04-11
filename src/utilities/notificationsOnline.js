@@ -1,5 +1,6 @@
 import {Row, Col, Button} from 'react-bootstrap';
 import React, {useEffect, useState} from "react";
+import {IoMdNotificationsOff} from "react-icons/all";
 
 
 export function NotificationsOnline({data}) {
@@ -9,7 +10,7 @@ export function NotificationsOnline({data}) {
     useEffect(() => {
         sendNotificationBasedOnTemperature();
 
-    });
+    }, [data, sendNotifications]);
 
     async function sendNotificationBasedOnTemperature() {
         if (!sendNotifications) return;
@@ -35,6 +36,25 @@ export function NotificationsOnline({data}) {
             }
 
         }
+        if (tempInCelsius >= tempMax) {
+
+            console.log(`ik stuur iets! Terrasjesweer!`);
+            const serviceWorkerRegistration = await navigator.serviceWorker?.getRegistration();
+            if (serviceWorkerRegistration) {
+                /**
+                 * als je een service worker hebt kan je de notification beter via het service worker object laten aanmaken
+                 * omdat de service worker dan ook op events van de notification kan reageren.
+                 * dit kan je alleen testen als je een service worker hebt... (dus in prod mode)
+                 */
+                serviceWorkerRegistration.showNotification(`Huidige temperatuur voor ${data.name} is ${tempInCelsius} graden Celcius. Ideale terrasjesweer!`);
+
+            } else {
+                /** een app zonder service worker kan ook notifications sturen: */
+                new Notification(`Huidige temperatuur voor ${data.name} is ${tempInCelsius} graden Celcius. Ideale terrasjesweer!`);
+
+            }
+
+        }
 
     }
 
@@ -43,7 +63,7 @@ export function NotificationsOnline({data}) {
             const permission = await Notification.requestPermission();
             console.log(`user heeft deze permission gegeven voor notifications: ${permission}`);
             if (permission === 'granted') {
-                    setSendNotifications(true)
+                setSendNotifications(true)
 
             }
         } else {
@@ -61,8 +81,6 @@ export function NotificationsOnline({data}) {
             <Row>
                 <Col>
                     <Button onClick={activateNotifications}>activate</Button>
-                </Col>
-                <Col>
                     <Button onClick={stopNotifications}>stop</Button>
                 </Col>
             </Row>
