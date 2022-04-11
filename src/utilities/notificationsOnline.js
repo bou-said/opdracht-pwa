@@ -1,6 +1,6 @@
 import {Row, Col, Button} from 'react-bootstrap';
 import React, {useEffect, useState} from "react";
-import {IoMdNotificationsOff} from "react-icons/all";
+
 
 
 export function NotificationsOnline({data}) {
@@ -80,7 +80,7 @@ export function NotificationsOnline({data}) {
         <div>
             <Row>
                 <Col>
-                    <Button onClick={activateNotifications}>activate</Button>
+                    <Button onClick={activateNotifications} className="mx-3">activate</Button>
                     <Button onClick={stopNotifications}>stop</Button>
                 </Col>
             </Row>
